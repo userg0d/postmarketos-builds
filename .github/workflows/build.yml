@@ -36,7 +36,7 @@ jobs:
           echo -e '\n\n' | pmbootstrap init || true
           cd ~/.local/var/pmbootstrap/cache_git/pmaports
           git remote
-          git remote add pipa https://github.com/pipa-project/pmaports-pipa.git
+          git remote add pipa https://github.com/userg0d/pmaports-pipa.git
           DEFAULT_BRANCH=$(git remote show pipa | awk '/HEAD branch/ {print $NF}')
           git fetch pipa $DEFAULT_BRANCH
           git reset --hard pipa/$DEFAULT_BRANCH
@@ -48,67 +48,13 @@ jobs:
            pmbootstrap export
            cp /tmp/postmarketOS-export/boot.img out/boot-xiaomi-pipa.img
            cp /tmp/postmarketOS-export/xiaomi-pipa.img out/rootfs-xiaomi-pipa-none.img
-
-      - name: Breakpoint if tests failed for xiaomi-pipa without DE
-        if: failure()
-        uses: namespacelabs/breakpoint-action@v0
-        with:
-          duration: 30m
-          authorized-users: nixxizlab
-      
+           
       - name: Upload artifacts xiaomi-pipa without DE
         uses: actions/upload-artifact@v4
         with:
            name: xiaomi-pipa-none
            path: out/*.img*
-           retention-days: 7
-
-      - name: Build the xiaomi-pipa with KDE Plasma Desktop
-        run: |
-           yes | pmbootstrap zap
-           rm -r out/*
-           pmbootstrap install --password 147147 --add postmarketos-ui-plasma-desktop
-           cat /home/runner/.local/var/pmbootstrap/log.txt
-           pmbootstrap export
-           cp /tmp/postmarketOS-export/boot.img out/boot-xiaomi-pipa.img
-           cp /tmp/postmarketOS-export/xiaomi-pipa.img out/rootfs-xiaomi-pipa-plasma.img
-
-      - name: Breakpoint if tests failed for xiaomi-pipa with KDE Plasma Desktop
-        if: failure()
-        uses: namespacelabs/breakpoint-action@v0
-        with:
-          duration: 30m
-          authorized-users: nixxizlab
-      
-      - name: Upload artifacts xiaomi-pipa with KDE Plasma Desktop
-        uses: actions/upload-artifact@v4
-        with:
-           name: xiaomi-pipa-plasma
-           path: out/*.img*
-           retention-days: 7
-            
-      - name: Build the xiaomi-pipa with GNOME
-        run: |
-           yes | pmbootstrap zap
-           rm -r out/*
-           pmbootstrap install --password 147147 --add postmarketos-ui-gnome
-           pmbootstrap export
-           cp /tmp/postmarketOS-export/boot.img out/boot-xiaomi-pipa.img
-           cp /tmp/postmarketOS-export/xiaomi-pipa.img out/rootfs-xiaomi-pipa-gnome.img
-
-      - name: Breakpoint if tests failed for xiaomi-pipa with GNOME
-        if: failure()
-        uses: namespacelabs/breakpoint-action@v0
-        with:
-          duration: 30m
-          authorized-users: nixxizlab
-            
-      - name: Upload artifacts xiaomi-pipa with GNOME
-        uses: actions/upload-artifact@v4
-        with:
-           name: xiaomi-pipa-gnome
-           path: out/*.img*
-           retention-days: 7
+           retention-days: 14
            
       - name: Copy xiaomi-pipa kernel
         run: |
@@ -120,7 +66,7 @@ jobs:
         with:
            name: xiaomi-pipa-kernel
            path: out/*.apk
-           retention-days: 7
+           retention-days: 14
 
 
 
